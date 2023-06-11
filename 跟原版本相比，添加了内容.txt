@@ -7,12 +7,11 @@ echo "status=success" >> $GITHUB_OUTPUT
 就是 删除 ::set-output name=       后面的 :: 改成 = 再加上 空格 >> $GITHUB_OUTPUT
 
 
-
  echo "::set-output name=url::$(cat cowtransfer.log | grep https | cut -f3 -d" ")"
 echo "url=$(cat cowtransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_OUTPUT
 
 
-3、
+3、修改了源文件
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v2
 
@@ -22,3 +21,13 @@ https://github.com/GitRML/delete-workflow-runs/blob/main/action.yaml
 他的源码还是用的还是 node12
 Mattraks 的源码里改成了用 node16：
 https://github.com/Mattraks/delete-workflow-runs/blob/main/action.yaml
+
+
+4、添加了这个
+    - name: Delete Files
+      run: |
+        docker rmi `docker images -q`
+        sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
+        sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* adoptopenjdk* mysql* php* mongodb* dotnet* moby* snapd* || true
+        sudo -E apt-get -y autoremove --purge
+        sudo -E apt-get clean
